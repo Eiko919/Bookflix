@@ -1,67 +1,32 @@
 // index.js
-const express = require('express');
-const app = express();
-const port = 3000;
+require('dotenv').config(); // Load environment variables
 
-// Middleware to handle static files, if you have any
-app.use(express.static('public'));
-
-// Define a route
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
-// index.js
-require('dotenv').config(); // Make sure to load environment variables from a .env file
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
-// Middleware to parse incoming JSON
-app.use(express.json());
+// Environment variables
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || process.env.DB_URI;
 
-// Load environment variables from .env file
-const DB_URI = process.env.DB_URI; // Store connection string in your .env file
+// Middleware
+app.use(express.json());
+app.use(express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((error) => console.log('Error connecting to MongoDB Atlas:', error));
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB Atlas"))
+.catch(err => console.log("MongoDB connection error:", err));
 
-// Example route
+// Route
 app.get('/', (req, res) => {
   res.send('Hello, MongoDB Atlas!');
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
-
-require('dotenv').config();
-const mongoose = require('mongoose');
-
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected...'))
-.catch((err) => console.log(err));
-
-require('dotenv').config(); // This loads the variables from the .env file
-const mongoose = require('mongoose');
-
-const mongoURI = process.env.MONGO_URI; // Access your connection string from the .env file
-
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.log(err));

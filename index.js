@@ -3,6 +3,7 @@ require('dotenv').config(); // Load environment variables
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');  // Import CORS
 const app = express();
 
 // Environment variables
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || process.env.DB_URI;
 
 // Middleware
+app.use(cors()); // Enable CORS for all origins
 app.use(express.json());
 app.use(express.static('public'));
 
